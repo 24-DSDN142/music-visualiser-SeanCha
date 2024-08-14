@@ -1,6 +1,8 @@
 
 // vocal, drum, bass, and other are volumes ranging from 0 to 100
-
+const r = 200;
+const lineWidth = 10;
+const lines = (r * 2) / lineWidth;
 let drumTurn = 0
 let counter2 = 0
 let drumDecay = 0
@@ -20,7 +22,7 @@ let circles = []
 let circles2 = []
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
   bubbleDecay--
-  let bassSize2 = map(bass, 50, 100, 10, 120)
+  let bassSize2 = map(bass, 50, 100, 0, 10)
   let bassSize3 = map(bass, 50, 100, 120, 50)
   function makeCurve(anchorX1, anchorX2, anchorY){
     let vocalSize = map(vocal,0,100,anchorY,anchorY+400)
@@ -35,16 +37,16 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     bezier(anchorX1,anchorY,x1,y1,x2,y2,anchorX2,anchorY)
     strokeWeight(1)
     fill(130,91,179)
-    let x = bezierPoint(anchorX1,x1,x2,anchorX2,0.7)
-    let y = bezierPoint(anchorY,y1,y2,anchorY,0.7)
-    let xTri = bezierPoint(anchorX1,x1,x2,anchorX2,0.65)
-    let yTri = bezierPoint(anchorY,y1,y2,anchorY,0.65)
-    triangle(x,y,xTri,yTri,(x+xTri)/2-5,(y+yTri)/2-10)
-    let x3 = bezierPoint(anchorX1,x1,x2,anchorX2,0.5)
-    let y3 = bezierPoint(anchorY,y1,y2,anchorY,0.5)
-    let xTri2 = bezierPoint(anchorX1,x1,x2,anchorX2,0.45)
-    let yTri2 = bezierPoint(anchorY,y1,y2,anchorY,0.45)
-    triangle(x3,y3,xTri2,yTri2,(x+xTri2)/2-20,(y+yTri2)/2+5)
+    // let x = bezierPoint(anchorX1,x1,x2,anchorX2,0.7)
+    // let y = bezierPoint(anchorY,y1,y2,anchorY,0.7)
+    // let xTri = bezierPoint(anchorX1,x1,x2,anchorX2,0.65)
+    // let yTri = bezierPoint(anchorY,y1,y2,anchorY,0.65)
+    // triangle(x,y,xTri,yTri,(x+xTri)/2-5,(y+yTri)/2-10)
+    // let x3 = bezierPoint(anchorX1,x1,x2,anchorX2,0.5)
+    // let y3 = bezierPoint(anchorY,y1,y2,anchorY,0.5)
+    // let xTri2 = bezierPoint(anchorX1,x1,x2,anchorX2,0.45)
+    // let yTri2 = bezierPoint(anchorY,y1,y2,anchorY,0.45)
+    // triangle(x3,y3,xTri2,yTri2,(x+xTri2)/2-20,(y+yTri2)/2+5)
   
     strokeWeight(3)
     function bubbleMovement(){
@@ -74,7 +76,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   function circleCreator(){
   fill(0)
   stroke(255)
-  let bassSize = map(bass, 0, 100, -3,7)
+  let bassSize = map(bass, 0, 100, -4,7)
 
   if (counter % 100 == 0 && counter > 100) {
     createCircle();
@@ -82,7 +84,6 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   updateCircles(bassSize);
   drawCircles();
   }
-
 
 
 
@@ -97,8 +98,8 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
 
   //Bezier Curves
   push()
-  scale(1.5)
-  translate(-100,-200)
+  scale(1.7)
+  translate(-100,-40)
   makeCurve(0,100,300)
   makeCurve(100,200,300)
   makeCurve(200,300,300)
@@ -106,22 +107,30 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   makeCurve(400,500,300)
   makeCurve(500,600,300)
   pop() 
-
+  
+  for (var i = 0; i <= lines; i++) {
+    const s = (i * lineWidth) + lineWidth;
+    const chordLength = (Math.sqrt((2 * s * r) - (s*s)) * 2 +bassSize2);
+    rect(i * lineWidth, r - (chordLength / 2), lineWidth-1, chordLength);
+    // rect(x, y, width, height)
+  }
+  triangle(0,0,)
+  triangle()
 
   let yPos1 = 600
   let yPos2 = 750
-  beginShape()
-  vertex(-1,bassSize3+yPos1)
-  vertex(75,bassSize2+yPos2)
-  vertex(150,bassSize3+yPos1)
-  vertex(225,bassSize2+yPos2)
-  vertex(300,bassSize3+yPos1)
-  vertex(375,bassSize2+yPos2)
-  vertex(450,bassSize3+yPos1)
-  vertex(525,bassSize2+yPos2)
-  vertex(601,bassSize3+yPos1)
-  vertex(601,1000)
-  vertex(-1,1000)
+  // beginShape()
+  // vertex(-1,bassSize3+yPos1)
+  // vertex(75,bassSize2+yPos2)
+  // vertex(150,bassSize3+yPos1)
+  // vertex(225,bassSize2+yPos2)
+  // vertex(300,bassSize3+yPos1)
+  // vertex(375,bassSize2+yPos2)
+  // vertex(450,bassSize3+yPos1)
+  // vertex(525,bassSize2+yPos2)
+  // vertex(601,bassSize3+yPos1)
+  // vertex(601,1000)
+  // vertex(-1,1000)
   
   
 
@@ -143,9 +152,9 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
 
   if (drumDecay > 0) {
     if(drumTurn==0) {
-      rect(50,600,150,150)
+      rect(75,600,150,150)
     } else if(drumTurn == 1) {
-      rect(300,600,150,150)
+      rect(350,600,150,150)
     }
     drumDecay--
   }
@@ -183,8 +192,8 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
 
 function createCircle() {
   let newCircle = {
-    x: 270,
-    y: 200,
+    x: 300,
+    y: 460,
     size: 15,
   };
   circles.push(newCircle);
@@ -202,26 +211,26 @@ function drawCircles() {;
   }
 }
 
-function createCircle2() {
-  let newCircle2 = {
-    x: 270,
-    y: 200,
-    size: 2,
-  };
-  circles2.push(newCircle2);
-}
+// function createCircle2() {
+//   let newCircle2 = {
+//     x: 270,
+//     y: 200,
+//     size: 2,
+//   };
+//   circles2.push(newCircle2);
+// }
 
-function updateCircles2(bass) {
-  for (let circle2 of circles2) {
-    circle2.size += 0.05+bass; // Increase the size of each circle over time
-  }
-}
+// function updateCircles2(bass) {
+//   for (let circle2 of circles2) {
+//     circle2.size += 0.05+bass; // Increase the size of each circle over time
+//   }
+// }
 
-function drawCircles2() {;
-  for (let circle2 of circles2) {
-    ellipse(circle2.x, circle2.y, circle2.size);
-  }
-}
+// function drawCircles2() {;
+//   for (let circle2 of circles2) {
+//     ellipse(circle2.x, circle2.y, circle2.size);
+//   }
+// }
 
 
 
