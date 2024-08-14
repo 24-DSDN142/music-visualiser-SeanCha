@@ -9,20 +9,22 @@ let bubble = []
 let bubbleMove = []
 let bubbleMove2 = []
 let bubbleDist = 14
-  
-function draw_one_frame(words, vocal, drum, bass, other, counter) {
-  // let vocalSize = map(vocal,0,100,200,500)
-  // let vocalSize2 = map(vocal,0,100,200,-100)
-  // let anchorY1 = map(vocal,0,100,100,200)
-  // let anchorY2 = map(vocal,0,100,200,300)
-  let anchorY = 200
-  let anchorX1 = 0
-  let anchorX2 = 100
-  bubbleDecay--
 
+let circleDecay = 100
+let circleSize = 0
+let circleArr = [100,200]
+
+let testCounter = []
+  
+let circles = []
+let circles2 = []
+function draw_one_frame(words, vocal, drum, bass, other, counter) {
+  bubbleDecay--
+  let bassSize2 = map(bass, 50, 100, 10, 120)
+  let bassSize3 = map(bass, 50, 100, 120, 50)
   function makeCurve(anchorX1, anchorX2, anchorY){
-    let vocalSize = map(vocal,0,100,anchorY,anchorY+300)
-    let vocalSize2 = map(vocal,0,100,anchorY,anchorY-300)
+    let vocalSize = map(vocal,0,100,anchorY,anchorY+400)
+    let vocalSize2 = map(vocal,0,100,anchorY,anchorY-400)
     let x1 = anchorX2-75
     let y1 = vocalSize
     let x2 = anchorX2-25
@@ -32,24 +34,25 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     strokeWeight(7);
     bezier(anchorX1,anchorY,x1,y1,x2,y2,anchorX2,anchorY)
     strokeWeight(1)
-    // let x = bezierPoint(anchorX1,x1,x2,anchorX2,0.7)
-    // let y = bezierPoint(anchorY,y1,y2,anchorY,0.7)
-    // let xTri = bezierPoint(anchorX1,x1,x2,anchorX2,0.65)
-    // let yTri = bezierPoint(anchorY,y1,y2,anchorY,0.65)
-    // triangle(x,y,xTri,yTri,(x+xTri)/2-5,(y+yTri)/2-10)
-    // let x3 = bezierPoint(anchorX1,x1,x2,anchorX2,0.5)
-    // let y3 = bezierPoint(anchorY,y1,y2,anchorY,0.5)
-    // let xTri2 = bezierPoint(anchorX1,x1,x2,anchorX2,0.45)
-    // let yTri2 = bezierPoint(anchorY,y1,y2,anchorY,0.45)
-    // triangle(x3,y3,xTri2,yTri2,(x+xTri2)/2-20,(y+yTri2)/2+5)
-
+    fill(130,91,179)
+    let x = bezierPoint(anchorX1,x1,x2,anchorX2,0.7)
+    let y = bezierPoint(anchorY,y1,y2,anchorY,0.7)
+    let xTri = bezierPoint(anchorX1,x1,x2,anchorX2,0.65)
+    let yTri = bezierPoint(anchorY,y1,y2,anchorY,0.65)
+    triangle(x,y,xTri,yTri,(x+xTri)/2-5,(y+yTri)/2-10)
+    let x3 = bezierPoint(anchorX1,x1,x2,anchorX2,0.5)
+    let y3 = bezierPoint(anchorY,y1,y2,anchorY,0.5)
+    let xTri2 = bezierPoint(anchorX1,x1,x2,anchorX2,0.45)
+    let yTri2 = bezierPoint(anchorY,y1,y2,anchorY,0.45)
+    triangle(x3,y3,xTri2,yTri2,(x+xTri2)/2-20,(y+yTri2)/2+5)
+  
     strokeWeight(3)
     function bubbleMovement(){
       for (let i=0;i<30;i++)
         bubbleMove2.push(i/30)
     }
     bubbleMovement()
-    for (let i=0;i<30;i++){
+    for (let i=0;i<30;i++){                          //bubbles
       bubbleMove2[i] = bubbleMove2[i]+0.001
       if (bubbleMove2[i]>=1){
         bubbleMove2[i]=0
@@ -63,36 +66,37 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
       point(xGlow1,yGlow)
       point(xGlow2,yGlow)
     }
-
-
-
-    // function randomBubble(){
-    //   for (let i = 0; i<100;i++){
-    //     bubble.push(random(0,1))
-    //     bubbleMove.push(random(-10,10))
-    //   }
-    // }
-    // if (bubbleDecay == 1){
-    //   bubble = []
-    //   bubbleMove = []
-    //   randomBubble()
-    //   bubbleDecay = 50
-    // }
-
-    // if (bubbleDecay > 0){
-    //   for (let i = 0; i<100; i++){
-    //     let xGlow = bezierPoint(anchorX1,x1+bubbleMove[i],x2+bubbleMove[i],anchorX2,bubble[i])
-    //     let yGlow = bezierPoint(anchorY,y1+bubbleMove[i],y2+bubbleMove[i],anchorY,bubble[i])
-    //     point(xGlow,yGlow)
-    //   }
-    // }
-
   }
 
 
+
+
+  function circleCreator(){
+  fill(0)
+  stroke(255)
+  let bassSize = map(bass, 0, 100, -3,7)
+
+  if (counter % 100 == 0 && counter > 100) {
+    createCircle();
+  }
+  updateCircles(bassSize);
+  drawCircles();
+  }
+
+
+
+
+
+
   clear()
-  background(255)
-  strokeWeight()
+
+  background(0)
+  
+  //Circles
+  circleCreator()
+
+  //Bezier Curves
+  push()
   scale(1.5)
   translate(-100,-200)
   makeCurve(0,100,300)
@@ -101,35 +105,54 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   makeCurve(300,400,300)
   makeCurve(400,500,300)
   makeCurve(500,600,300)
+  pop() 
 
 
-  strokeWeight(5)
-
-
-
-
-
-  // let drumSize = map(drum, 0, 100,0,100)  
-  // if (drumSize >= 60 && drumTurn == 0 && drumDecay == 0){
-  //   drumDecay = 15
-  //   drumTurn = 1
-  // }
-  // if(drumSize >=60 && drumTurn == 1 && drumDecay == 0){
-  //   drumDecay = 15
-  //   drumTurn = 0
-  // }
-
-  // if (drumDecay > 0) {
-  //   if(drumTurn==0) {
-  //     rect(100,100,100,100)
-  //   } else if(drumTurn == 1) {
-  //     rect(200,100,100,100)
-  //   }
-  //   drumDecay--
-  // }
-  // console.log(drumTurn)
+  let yPos1 = 600
+  let yPos2 = 750
+  beginShape()
+  vertex(-1,bassSize3+yPos1)
+  vertex(75,bassSize2+yPos2)
+  vertex(150,bassSize3+yPos1)
+  vertex(225,bassSize2+yPos2)
+  vertex(300,bassSize3+yPos1)
+  vertex(375,bassSize2+yPos2)
+  vertex(450,bassSize3+yPos1)
+  vertex(525,bassSize2+yPos2)
+  vertex(601,bassSize3+yPos1)
+  vertex(601,1000)
+  vertex(-1,1000)
   
   
+
+
+
+
+  endShape(CLOSE)
+  //Drums
+  noFill()
+  let drumSize = map(drum, 0, 100,0,100)  
+  if (drumSize >= 65 && drumTurn == 0 && drumDecay <= 0){
+    drumDecay = 4.5
+    drumTurn = 1
+  }
+  if(drumSize >=65 && drumTurn == 1 && drumDecay <= 0){
+    drumDecay = 4.5
+    drumTurn = 0
+  }
+
+  if (drumDecay > 0) {
+    if(drumTurn==0) {
+      rect(50,600,150,150)
+    } else if(drumTurn == 1) {
+      rect(300,600,150,150)
+    }
+    drumDecay--
+  }
+  console.log(drumTurn)
+  
+
+
   
   
   
@@ -144,7 +167,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   // let drumLoc = map(drum, 0, 100, 550,200)
   // ellipse(230,drumLoc,100,100)
   
-  // let bassSize = map(bass, 0, 100, 100, 600)
+
   // rect(0,700,bassSize,100)
 
   // let otherSize = map(other, 0, 100, -100, -600)
@@ -157,6 +180,49 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   //   }
   // }
 }
+
+function createCircle() {
+  let newCircle = {
+    x: 270,
+    y: 200,
+    size: 15,
+  };
+  circles.push(newCircle);
+}
+
+function updateCircles(bass) {
+  for (let circle of circles) {
+    circle.size += 0.1+bass; // Increase the size of each circle over time
+  }
+}
+
+function drawCircles() {;
+  for (let circle of circles) {
+    ellipse(circle.x, circle.y, circle.size);
+  }
+}
+
+function createCircle2() {
+  let newCircle2 = {
+    x: 270,
+    y: 200,
+    size: 2,
+  };
+  circles2.push(newCircle2);
+}
+
+function updateCircles2(bass) {
+  for (let circle2 of circles2) {
+    circle2.size += 0.05+bass; // Increase the size of each circle over time
+  }
+}
+
+function drawCircles2() {;
+  for (let circle2 of circles2) {
+    ellipse(circle2.x, circle2.y, circle2.size);
+  }
+}
+
 
 
   //  let bar_spacing = height / 10;
