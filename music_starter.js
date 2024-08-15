@@ -18,6 +18,84 @@ let testCounter = []
   
 let circles = []
 let circles2 = []
+let firstRun = true
+let img;
+
+let particles = [];
+
+let mode = 0
+
+
+
+
+class Particle {
+  constructor(x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.vx = random(-1, 1);
+    this.vy = random(-2, -z);
+    this.alpha = 255;
+  }
+
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.alpha -= 6;
+  }
+
+  show() {
+    noStroke();
+    fill(255, this.alpha, 0, this.alpha);
+    ellipse(this.x, this.y, 10);
+  }
+
+  isFinished() {
+    return this.alpha <= 0;
+  }
+}
+
+// Fire class to manage the particles
+class Fire {
+  constructor() {
+    this.particles = [];
+  }
+
+  addParticle(x, y, z) {
+    this.particles.push(new Particle(x, y, z));
+    this.particles.push(new Particle(x-(random(10,50)), y, z));
+    this.particles.push(new Particle(x+(random(10,50)), y, z));
+    this.particles.push(new Particle(x-(random(50,100)), y, z));
+    this.particles.push(new Particle(x+(random(50,100)), y, z));
+  }
+
+  update() {
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      this.particles[i].update();
+      if (this.particles[i].isFinished()) {
+        this.particles.splice(i, 1);
+      }
+    }
+    //console.log(this.particles.length)
+  }
+
+  show() {
+    for (let particle of this.particles) {
+      particle.show();
+    }
+  }
+}
+
+// Create an instance of the Fire class
+let fire = new Fire();
+
+for (let x = 0; x < width; x += 20) {
+  for (let y = 0; y < height; y += 20) {
+    particles.push(new Particle2(x, y, random(10,20)));
+    line(x,y,10)
+  }
+}
+
+
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
   bubbleDecay--
   let bassSize2 = map(bass, 50, 100, 10, 120)
@@ -35,16 +113,16 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
     bezier(anchorX1,anchorY,x1,y1,x2,y2,anchorX2,anchorY)
     strokeWeight(1)
     fill(130,91,179)
-    let x = bezierPoint(anchorX1,x1,x2,anchorX2,0.7)
-    let y = bezierPoint(anchorY,y1,y2,anchorY,0.7)
-    let xTri = bezierPoint(anchorX1,x1,x2,anchorX2,0.65)
-    let yTri = bezierPoint(anchorY,y1,y2,anchorY,0.65)
-    triangle(x,y,xTri,yTri,(x+xTri)/2-5,(y+yTri)/2-10)
-    let x3 = bezierPoint(anchorX1,x1,x2,anchorX2,0.5)
-    let y3 = bezierPoint(anchorY,y1,y2,anchorY,0.5)
-    let xTri2 = bezierPoint(anchorX1,x1,x2,anchorX2,0.45)
-    let yTri2 = bezierPoint(anchorY,y1,y2,anchorY,0.45)
-    triangle(x3,y3,xTri2,yTri2,(x+xTri2)/2-20,(y+yTri2)/2+5)
+    // let x = bezierPoint(anchorX1,x1,x2,anchorX2,0.7)
+    // let y = bezierPoint(anchorY,y1,y2,anchorY,0.7)
+    // let xTri = bezierPoint(anchorX1,x1,x2,anchorX2,0.65)
+    // let yTri = bezierPoint(anchorY,y1,y2,anchorY,0.65)
+    // triangle(x,y,xTri,yTri,(x+xTri)/2-5,(y+yTri)/2-10)
+    // let x3 = bezierPoint(anchorX1,x1,x2,anchorX2,0.5)
+    // let y3 = bezierPoint(anchorY,y1,y2,anchorY,0.5)
+    // let xTri2 = bezierPoint(anchorX1,x1,x2,anchorX2,0.45)
+    // let yTri2 = bezierPoint(anchorY,y1,y2,anchorY,0.45)
+    // triangle(x3,y3,xTri2,yTri2,(x+xTri2)/2-20,(y+yTri2)/2+5)
   
     strokeWeight(3)
     function bubbleMovement(){
@@ -70,7 +148,6 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
 
 
 
-
   function circleCreator(){
   fill(0)
   stroke(255)
@@ -91,65 +168,108 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   clear()
 
   background(0)
+  cx = 0
+  cy = 0
+  r = 100
+  z=10
+  let rotateMap = map(bass, 0, 100, 0, 360)
+  push()
+  fill(203, 219, 235)
+  function silverChariot(x,y){
+  translate(x,y)
+  var x = cx + r*Math.cos(30/180 * Math.PI);
+  var y = cy + r*Math.sin(30/180 * Math.PI);
+  var x2 = cx + r*Math.cos(z/180 * Math.PI);
+  var y2 = cy + r*Math.sin(z/180 * Math.PI);
+  var x3 = cx + r*1.5*Math.cos(20/180 * Math.PI);
+  var y3 = cy + r*1.5*Math.sin(20/180 * Math.PI);
+  stroke(0)
+  rotate(rotateMap)
+  rotate(0)
+  triangle(x,y,x2,y2,x3,y3)
+  rotate(90)
+  triangle(x,y,x2,y2,x3,y3)
+  rotate(180)
+  triangle(x,y,x2,y2,x3,y3)
+  rotate(270)
+  triangle(x,y,x2,y2,x3,y3)
+  circle(cx,cy,r*2)
+  circle(cx,cy,r)
+  pop()
+  }
+  push()
+  silverChariot(150,475)
+  silverChariot(650,475)
+  pop()
+  // line(cx,cy,x,y)
+  // line(cx,cy,x2,y2)
+  // line(cx,cy,x3,y3)
+
   
   //Circles
-  circleCreator()
-
-  //Bezier Curves
+  //circleCreator()
+  
+  //Bezier Curves MODE ONE
   push()
+  let yCurvePos = 150
   scale(1.5)
-  translate(-100,-200)
-  makeCurve(0,100,300)
-  makeCurve(100,200,300)
-  makeCurve(200,300,300)
-  makeCurve(300,400,300)
-  makeCurve(400,500,300)
-  makeCurve(500,600,300)
+  translate(-100,-50)
+  makeCurve(0,100,yCurvePos)
+  makeCurve(100,200,yCurvePos)
+  makeCurve(200,300,yCurvePos)
+  makeCurve(300,400,yCurvePos)
+  makeCurve(400,500,yCurvePos)
+  makeCurve(500,600,yCurvePos)
+  makeCurve(600,700,yCurvePos)
+  makeCurve(700,800,yCurvePos)
   pop() 
 
 
-  let yPos1 = 600
-  let yPos2 = 750
-  beginShape()
-  vertex(-1,bassSize3+yPos1)
-  vertex(75,bassSize2+yPos2)
-  vertex(150,bassSize3+yPos1)
-  vertex(225,bassSize2+yPos2)
-  vertex(300,bassSize3+yPos1)
-  vertex(375,bassSize2+yPos2)
-  vertex(450,bassSize3+yPos1)
-  vertex(525,bassSize2+yPos2)
-  vertex(601,bassSize3+yPos1)
-  vertex(601,1000)
-  vertex(-1,1000)
+
+
+  // Emeral Splash
+
+  // if (firstRun == true){
+  // img = loadImage('emerald1.png')
+  // firstRun = false}
+  // image(img,100,100,333/4,219/4)
+
   
   
 
 
+  stroke(255)
 
-
-  endShape(CLOSE)
   //Drums
   noFill()
-  let drumSize = map(drum, 0, 100,0,100)  
-  if (drumSize >= 65 && drumTurn == 0 && drumDecay <= 0){
-    drumDecay = 4.5
-    drumTurn = 1
-  }
-  if(drumSize >=65 && drumTurn == 1 && drumDecay <= 0){
-    drumDecay = 4.5
-    drumTurn = 0
-  }
+  // let drumSize = map(drum, 0, 100,0,100)  
+  // if (drumSize >= 65 && drumTurn == 0 && drumDecay <= 0){
+  //   drumDecay = 4.5
+  //   drumTurn = 1
+  // }
+  // if(drumSize >=65 && drumTurn == 1 && drumDecay <= 0){
+  //   drumDecay = 4.5
+  //   drumTurn = 0
+  // }
 
-  if (drumDecay > 0) {
-    if(drumTurn==0) {
-      rect(50,600,150,150)
-    } else if(drumTurn == 1) {
-      rect(300,600,150,150)
-    }
-    drumDecay--
+  // if (drumDecay > 0) {
+  //   if(drumTurn==0) {
+  //     rect(50,600,150,150)
+  //   } else if(drumTurn == 1) {
+  //     rect(300,600,150,150)
+  //   }
+  //   drumDecay--
+  // }
+  let drumFire
+  if (drum <= 60){
+    drumFire = 1
+  }else if (drum > 60){
+    drumFire = map(drum, 60, 100, 5, 20)
   }
   console.log(drumTurn)
+  fire.addParticle(random(0,1000),790, drumFire);
+  fire.update();
+  fire.show();
   
 
 
@@ -202,27 +322,31 @@ function drawCircles() {;
   }
 }
 
-function createCircle2() {
-  let newCircle2 = {
-    x: 270,
-    y: 200,
-    size: 2,
-  };
-  circles2.push(newCircle2);
-}
+class Particle2 {
+  constructor(x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.vx = random(-1, 1);
+    this.vy = random(-2, -z);
+    this.alpha = 255;
+  }
 
-function updateCircles2(bass) {
-  for (let circle2 of circles2) {
-    circle2.size += 0.05+bass; // Increase the size of each circle over time
+  update() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.alpha -= 6;
+  }
+
+  show() {
+    noStroke();
+    fill(0, 255, 0, this.alpha); // Green color for Hierophant Green
+    ellipse(this.x, this.y, 10);
+  }
+
+  isFinished() {
+    return this.alpha <= 0;
   }
 }
-
-function drawCircles2() {;
-  for (let circle2 of circles2) {
-    ellipse(circle2.x, circle2.y, circle2.size);
-  }
-}
-
 
 
   //  let bar_spacing = height / 10;
