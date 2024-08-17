@@ -96,6 +96,7 @@ for (let x = 0; x < width; x += 20) {
 }
 
 
+
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
   bubbleDecay--
   let bassSize2 = map(bass, 50, 100, 10, 120)
@@ -145,7 +146,7 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
       point(xGlow2,yGlow)
     }
   }
-
+  console.log(bubbleMove2)
 
 
   function circleCreator(){
