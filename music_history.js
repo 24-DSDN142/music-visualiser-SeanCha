@@ -40,40 +40,29 @@ function add_to_history(history, d) {
 
 function draw_one_frame(words, vocal, drum, bass, other,counter) {
   background(20);
+  // Set the noise level and scale.
+  let noiseLevel = 100;
+  let noiseScale = 0.01;
 
-  add_to_history(words_history, words);
-  add_to_history(vocal_history, vocal);
-  add_to_history(drum_history, drum);
-  add_to_history(bass_history, bass);
-  add_to_history(other_history, other);
+  // Iterate from top to bottom.
+  for (let y = 0; y < 800; y += 1) {
+    // Iterate from left to right.
+    for (let x = 0; x < width; x += 1) {
+      // Scale the input coordinates.
+      let nx = noiseScale * x;
+      let ny = noiseScale * y;
+      let nt = noiseScale * frameCount;
 
-  strokeWeight(10);  
+      // Compute the noise value.
+      let c = noiseLevel * noise(nx, ny, nt);
 
-  // vocal bar is red
-  stroke(200, 0, 0);
-  draw_history_line(vocal_history);
-
-  // drum bar is green
-  stroke(0, 200, 0);
-  draw_history_line(drum_history);
-
-  // bass bar is blue
-  stroke(0, 0, 200);
-  draw_history_line(bass_history);
-
-  // other bar is white
-  stroke(200, 200, 200);
-  draw_history_line(other_history);
-
-  textAlign(CENTER);
-  textSize(25);
-
-  // big yellow words on top
-  noStroke();
-  fill(255, 255, 0);
-  draw_history_words(words_history);    
+      // Draw the point.
+      stroke(c);
+      point(x, y);
+    }
+  }
+  
 }
-
 function reset_music() {
   vocal_history = [];
   drum_history = [];

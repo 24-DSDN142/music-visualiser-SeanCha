@@ -7,6 +7,14 @@ let bubbleMove = []
 let bubbleMove2 = []
 let bubbleDist = 14
 
+let rectLoc = [10,20,30,40,50]
+starsA = [100,300,700,500,3000,3500,2900,3200,2500,500,700,900,850,5000,4700,4000,4300,4100,3000,3100,2900,2600,7500,7000,6600,6600,7300,7500,7300,7000,6700,]
+starsA2 =  [100,300,900,1000,1000,300,1500,1700,1100,6000,6500,5700,6300,7500,7000,6700,7000,7800,3000,3300,3700,3300,700,900,1000,500,1500,6000,5600,5200,5500]
+let starsB = []
+let starsB2 = []
+let firstRun = 0
+
+
 class Particle {
   constructor(x, y, z) {
     this.x = x;
@@ -76,6 +84,11 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   background(20);
   rectMode(CENTER)
   fill(255)
+  firstRun++
+  if (firstRun <= 75){
+    console.log(starsB)
+    console.log(starsB2)
+  }else{}
 
 
   function makeCurve(anchorX1, anchorX2, anchorY, width){
@@ -119,6 +132,8 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     pop()
   }
   push()
+  // Set the noise level and scale.
+
 
 
   noStroke()
@@ -140,6 +155,43 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   let vocalRange = map(vocal, 40, 100, 0, 30)
   let vocalRange2 = map(vocal, 0, 100, 30,70)
 
+  // Background stars
+  function stars(scale2,speed,arrayX,arrayY){
+    for (let i = 0; i<arrayX.length; i++){
+      arrayY[i] = arrayY[i]+speed/scale2
+      push()
+      stroke(255)
+      strokeWeight(4)
+      noFill()
+      scale(scale2)
+      glow(color(255),10)
+      glow(color(255),20)
+      translate()
+      beginShape()
+      vertex(arrayX[i],arrayY[i]-50)
+      vertex(arrayX[i]-5,arrayY[i]-5)
+      vertex(arrayX[i]-50,arrayY[i])
+      vertex(arrayX[i]-5,arrayY[i]+5)
+      vertex(arrayX[i],arrayY[i]+50)
+      vertex(arrayX[i]+5,arrayY[i]+5)
+      vertex(arrayX[i]+50,arrayY[i])
+      vertex(arrayX[i]+5,arrayY[i]-5)
+      endShape(CLOSE)
+      if (arrayY[i] > 850/scale2){
+        arrayY[i] = -50/scale2
+      }
+      pop()
+    }
+  }
+
+  stars(0.1,0,starsA,starsA2)
+  stars(0.08,1,starsB,starsB2)
+
+
+
+
+
+
   // Middle Star
   for (let i = 0; i < 20; i++){
     glow(color(255), vocalRange2)
@@ -158,16 +210,6 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   glow(color(255), 20)
 
 
-  // First Left Star
-  translate(bezierX+200,bezierY+300)
-  rotate(80)
-  makeCurve(-100,300,0,75)
-  makeCurve(-100,300,20,75)
-  makeCurve(-100,300,40,75)
-  makeCurve(-500,-100,0,75)
-  makeCurve(-500,-100,20,75)
-  makeCurve(-500,-100,40,75)
-  pop()
 
   // Second Right Star
   let drumFire  // Fire speed
@@ -182,7 +224,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   let drumSize = map(drum, 0, 100, 0,60) // Star size
   let drumSize2 = map(drum, 0, 100, 0,50) // Fire length
   
-  glow(color(255),5)
+  glow(color(255),30)
   push()
   translate(circleX3+615,circleY3+650)
   rotate(10)
@@ -197,81 +239,17 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   ellipse(0,0,drumSize+30)
   pop()
 
-  // let bar_spacing = width/5;
-  // let bar_pos_y = 2*height/3;
-
-  // let loudest = 0; // loudest should be 1, 2, 3, 4 (which of the 4 channels is strongest)
-  // // 
-  // if(vocal > drum && vocal > bass && vocal > other) {
-  //   loudest = 1;
-  // }
-  // else if(drum > vocal && drum > bass && drum > other) {
-  //   loudest = 2;
-  // }
-  // else if(bass > vocal && bass > drum && bass > other) {
-  //   loudest = 3;
-  // }
-  // else {
-  //   loudest = 4;
-  // }
- 
-
-  // if(loudest == old_loudest) {
-  //   background(20);
-  // }
-  // else if(loudest == 1) {
-  //   background(200, 0, 0);
-  // }
-  // else if(loudest == 2) {
-  //   background(0, 200, 0);
-  // }
-  // else if(loudest == 3) {
-  //   background(0, 0, 200);
-  // }
-  // else {
-  //   background(200, 200, 200);
-  // }
-
-  // old_loudest = loudest;
-
-  // // by default all bars are skinny
-  // let bar_width1 = width/12;
-  // let bar_width2 = width/12;
-  // let bar_width3 = width/12;
-  // let bar_width4 = width/12;
-
-  // // but make the loudest section fatter
-  // if(loudest == 1) {
-  //   bar_width1 = width/5;
-  // }
-  // else if(loudest == 2) {
-  //   bar_width2 = width/5;
-  // }
-  // else if(loudest == 3) {
-  //   bar_width3 = width/5;
-  // }
-  // else {
-  //   bar_width4 = width/5;
-  // }
-
-  // fill(200, 200, 0);
-  // text(words, width/2, height/3);
-
-  // // vocal bar is red
-  // fill(200, 0, 0);
-  // rect(1 * bar_spacing, bar_pos_y, bar_width1, 4 * vocal);
-
-  // // drum bar is green
-  // fill(0, 200, 0);
-  // rect(2 * bar_spacing, bar_pos_y, bar_width2, 4 * drum);
-
-  // // bass bar is blue
-  // fill(0, 0, 200);
-  // rect(3 * bar_spacing, bar_pos_y, bar_width3, 4 * bass);
-
-  // // other bar is white
-  // fill(200, 200, 200);
-  // rect(4 * bar_spacing, bar_pos_y, bar_width4, 4 * other);
+  // First Left Star
+  translate(bezierX+200,bezierY+300)
+  rotate(80)
+  makeCurve(-100,300,0,75)
+  makeCurve(-100,300,20,75)
+  makeCurve(-100,300,40,75)
+  makeCurve(-500,-100,0,75)
+  makeCurve(-500,-100,20,75)
+  makeCurve(-500,-100,40,75)
+  pop()
+  
 }
 function glow(glowColor, blurriness) {
   drawingContext.shadowColor = glowColor;
