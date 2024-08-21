@@ -1,71 +1,62 @@
-let words_history = [];
-let vocal_history = [];
-let drum_history = [];
-let bass_history = [];
-let other_history = [];
-
-function draw_history_line(history) {
-  beginShape(LINES);
-  for(let i=0; i<history.length; i++) {
-    let x = i*4;
-    let y = map(history[i], 0, 100, height, height/8, true);
-    vertex(x, y);
-  }
-  endShape();
-}
-
-function draw_history_words(history) {
-  let last_words = history[0];
-  let text_y = height/8;
-  for(let i=0; i<history.length; i++) {
-    let x = i*4;
-    let cur_words = history[i];
-    if(cur_words != last_words) {
-      push();
-      translate(x, text_y);
-      rotate(-30);
-      text(cur_words, 0, 0);
-      pop();
-      last_words = cur_words;
-    }
-  }
-}
-
-function add_to_history(history, d) {
-  history.push(d);
-  if(history.length >= (width-1)/4) {
-    history.shift();
-  }
-}
+let yPos = 0
+//let cShapeX = [0,10,20,-10,-20,0,10,20,-10,-20]
+//let cShapeY = [0,-100,-200,-300,-400,-500,-600,-700,-800,-900]
+let speed
+let rotation = []
+let firstRun3 = true
+let firstRun2 = true
+let cShapeX = []
+let cShapeY = []
 
 function draw_one_frame(words, vocal, drum, bass, other,counter) {
-  background(20);
-  // Set the noise level and scale.
-  let noiseLevel = 100;
-  let noiseScale = 0.01;
+  background(0)
 
-  // Iterate from top to bottom.
-  for (let y = 0; y < 800; y += 1) {
-    // Iterate from left to right.
-    for (let x = 0; x < width; x += 1) {
-      // Scale the input coordinates.
-      let nx = noiseScale * x;
-      let ny = noiseScale * y;
-      let nt = noiseScale * frameCount;
+  let emeraldSpeedVocal = map(vocal,0,100,10,25)
+  let emeraldStarVocal = map(vocal, 0, 100, 80,110)
 
-      // Compute the noise value.
-      let c = noiseLevel * noise(nx, ny, nt);
+  push()
+  stroke(255)
+  strokeWeight(2)
+  fill(255)
+  translate(0,0)
+  ellipse(0,0,emeraldStarVocal)
+  noFill()
+  function customShape(i){
+    beginShape()
+    vertex(0+cShapeX[i],0+cShapeY[i])
+    vertex(20+cShapeX[i],20+cShapeY[i])
+    vertex(20+cShapeX[i],50+cShapeY[i])
+    vertex(0+cShapeX[i],70+cShapeY[i])
+    vertex(-20+cShapeX[i],50+cShapeY[i])
+    vertex(-20+cShapeX[i],20+cShapeY[i])
+    endShape(CLOSE)
+  }
 
-      // Draw the point.
-      stroke(c);
-      point(x, y);
+  if (firstRun3 == true){
+    for (let i = 0; i<40; i++){
+      cShapeY.push(i*-30)
+      cShapeX.push(random(-50,50))
+      firstRun3 = false
     }
   }
-  
-}
-function reset_music() {
-  vocal_history = [];
-  drum_history = [];
-  bass_history = [];
-  other_history = [];
+
+  for (let i = 0; i < cShapeX.length; i++){
+    if (firstRun2 == true){
+      rotation[i] = random(-10,10)
+      firstRun2 = false
+    }
+    push()
+    scale(0.8)
+    rotate(rotation[i])
+    cShapeY[i] = cShapeY[i] -emeraldSpeedVocal
+    translate(0,-70)
+    customShape(i,cShapeY[i])
+    pop()
+    if (cShapeY[i] <= cShapeX.length*-29){
+      cShapeY[i] = 0
+      rotation[i] = random(-10,10)
+    }
+
+  }
+  pop()
 }

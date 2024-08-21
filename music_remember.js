@@ -7,11 +7,19 @@ let bubbleMove = []
 let bubbleMove2 = []
 let bubbleDist = 14
 
+let rotation = []
+let firstRun3 = true
+let firstRun2 = true
+let cShapeX = []
+let cShapeY = []
+
 let rectLoc = [10,20,30,40,50]
 starsA = [100,300,700,500,3000,3500,2900,3200,2500,500,700,900,850,5000,4700,4000,4300,4100,3000,3100,2900,2600,7500,7000,6600,6600,7300,7500,7300,7000,6700,]
 starsA2 =  [100,300,900,1000,1000,300,1500,1700,1100,6000,6500,5700,6300,7500,7000,6700,7000,7800,3000,3300,3700,3300,700,900,1000,500,1500,6000,5600,5200,5500]
-let starsB = []
-let starsB2 = []
+let starsB = [100,300,450,1000,800,1200,2200,1500,2400,2300,1600]
+let starsB2 = [800,1100,600,2000,2300,1700,1000,300,1200,2400,1200]
+let starsC = [700,900,650,550,1000,600]
+let starsC2 = [500,400,200,1000,1200,1500]
 let firstRun = 0
 
 
@@ -94,12 +102,12 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   function makeCurve(anchorX1, anchorX2, anchorY, width){
     push()
     bubbleDecay--
-    let vocalSize = map(vocal,0,100,anchorY,anchorY+300)
-    let vocalSize2 = map(vocal,0,100,anchorY,anchorY-300)
+    let bassSize = map(bass,0,100,anchorY,anchorY+300)
+    let bassSize2 = map(bass,0,100,anchorY,anchorY-300)
     let x1 = anchorX2-150
-    let y1 = vocalSize-width
+    let y1 = bassSize-width
     let x2 = anchorX2-250
-    let y2 = vocalSize2+width
+    let y2 = bassSize2+width
     noFill();
     stroke(255); //130, 91, 179
     strokeWeight(7);
@@ -138,7 +146,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 
   noStroke()
   let noiseLevel = 50
-  let noiseScale = 0.02
+  let noiseScale = 0.01
   let nt = noiseScale * frameCount
   let circleX = noiseLevel * noise(nt)
   let circleY = noiseLevel * noise(nt+10000)
@@ -163,9 +171,9 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
       stroke(255)
       strokeWeight(4)
       noFill()
+      translate()
       scale(scale2)
-      glow(color(255),10)
-      glow(color(255),20)
+      glow(color(255),30)
       translate()
       beginShape()
       vertex(arrayX[i],arrayY[i]-50)
@@ -184,8 +192,10 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     }
   }
 
-  stars(0.1,0,starsA,starsA2)
-  stars(0.08,1,starsB,starsB2)
+  stars(0.1,1,starsA,starsA2)
+  stars(0.3,2,starsB,starsB2)
+  stars(0.5,3,starsC,starsC2)
+
 
 
 
@@ -199,15 +209,23 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   }
   ellipse(circleX+375,circleY+550,45+vocalRange)
 
-  // First right star
-  push()
-  rotate(5)
-  for (let i = 0; i < 20; i++){
-    glow(color(255), vocalRange2)
-    rect(circleX2+550,circleY2-i*55-25+550,30+i*3+vocalRange,50)
-  }
+
+
+  // First Right Star
+  translate(bezierX+570,bezierY+100)
+  rotate(-80)
+  makeCurve(-100,300,0,75)
+  makeCurve(-100,300,20,75)
+  makeCurve(-100,300,40,75)
+  makeCurve(-500,-100,0,75)
+  makeCurve(-500,-100,20,75)
+  makeCurve(-500,-100,40,75)
   pop()
-  glow(color(255), 20)
+  let fps = frameRate();
+  fill(255);
+  stroke(0);
+  text("FPS: " + fps.toFixed(2), 10, height - 10);
+
 
 
 
@@ -227,7 +245,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   glow(color(255),30)
   push()
   translate(circleX3+615,circleY3+650)
-  rotate(10)
+  rotate(20)
 
   fire.addParticle(random(0-drumSize2,0+drumSize2),0, drumFire);
   if (drum>60){
@@ -239,15 +257,60 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   ellipse(0,0,drumSize+30)
   pop()
 
-  // First Left Star
-  translate(bezierX+200,bezierY+300)
-  rotate(80)
-  makeCurve(-100,300,0,75)
-  makeCurve(-100,300,20,75)
-  makeCurve(-100,300,40,75)
-  makeCurve(-500,-100,0,75)
-  makeCurve(-500,-100,20,75)
-  makeCurve(-500,-100,40,75)
+
+
+  //Second Left Star
+  let emeraldSpeedVocal = map(vocal,0,100,10,25)
+  let emeraldStarVocal = map(vocal, 0, 100, 80,110)
+
+  push()
+  stroke(255)
+  strokeWeight(5)
+  fill(255)
+  translate(250,600)
+  rotate(-10)
+
+  glow(color(255),30)
+  ellipse(0,0,emeraldStarVocal)
+  noFill()
+  function customShape(i){
+    glow(color(255),30)
+    beginShape()
+    vertex(0+cShapeX[i],0+cShapeY[i])
+    vertex(20+cShapeX[i],20+cShapeY[i])
+    vertex(20+cShapeX[i],50+cShapeY[i])
+    vertex(0+cShapeX[i],70+cShapeY[i])
+    vertex(-20+cShapeX[i],50+cShapeY[i])
+    vertex(-20+cShapeX[i],20+cShapeY[i])
+    endShape(CLOSE)
+  }
+
+  if (firstRun3 == true){
+    for (let i = 0; i<40; i++){
+      cShapeY.push(i*-30)
+      cShapeX.push(random(-50,50))
+      firstRun3 = false
+    }
+  }
+
+  for (let i = 0; i < cShapeX.length; i++){
+    if (firstRun2 == true){
+      rotation[i] = random(-10,10)
+      firstRun2 = false
+    }
+    push()
+    scale(0.8)
+    rotate(rotation[i])
+    cShapeY[i] = cShapeY[i] -emeraldSpeedVocal
+    translate(0,-70)
+    customShape(i,cShapeY[i])
+    pop()
+    if (cShapeY[i] <= cShapeX.length*-29){
+      cShapeY[i] = 0
+      rotation[i] = random(-10,10)
+    }
+
+  }
   pop()
   
 }
