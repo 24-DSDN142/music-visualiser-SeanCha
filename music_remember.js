@@ -14,6 +14,7 @@ let cShapeX = []
 let cShapeY = []
 
 let rectLoc = [10,20,30,40,50]
+let starSpeed
 starsA = [100,300,700,500,3000,3500,2900,3200,2500,500,700,900,850,5000,4700,4000,4300,4100,3000,3100,2900,2600,7500,7000,6600,6600,7300,7500,7300,7000,6700,]
 starsA2 =  [100,300,900,1000,1000,300,1500,1700,1100,6000,6500,5700,6300,7500,7000,6700,7000,7800,3000,3300,3700,3300,700,900,1000,500,1500,6000,5600,5200,5500]
 let starsB = [100,300,450,1000,800,1200,2200,1500,2400,2300,1600]
@@ -21,6 +22,11 @@ let starsB2 = [800,1100,600,2000,2300,1700,1000,300,1200,2400,1200]
 let starsC = [700,900,650,550,1000,600]
 let starsC2 = [500,400,200,1000,1200,1500]
 let firstRun = 0
+
+
+let noiseLevel
+let noiseScale
+let noise2 = 5
 
 
 class Particle {
@@ -140,28 +146,57 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     pop()
   }
   push()
-  // Set the noise level and scale.
+  //console.log(counter)
+  console.log(counter)
+  speedUpStart = 3200
+  speedUpEnd = 4300
+
+  if (counter < speedUpStart){
+    noiseLevel = 50
+    noiseScale = 0.02
+  }
+  if (counter >speedUpStart && counter < speedUpEnd){
+    rect(500,700,20,20)
+    if (noiseLevel <75){
+      noiseLevel++
+    }
+    if (noiseScale < 0.03){
+      noiseScale = noiseScale +0.01
+    }
+  }
+  if (counter >= speedUpEnd){
+    if (noiseLevel > 50){
+      noiseLevel--
+    }
+    if (noiseScale > 0.02){
+    noiseScale = noiseScale -0.01
+    }
+  }
 
 
+  
 
   noStroke()
-  let noiseLevel = 50
-  let noiseScale = 0.01
+
   let nt = noiseScale * frameCount
-  let circleX = noiseLevel * noise(nt)
-  let circleY = noiseLevel * noise(nt+10000)
+  let circleX = noiseLevel * noise(nt+noise2*1)
+  let circleY = noiseLevel * noise(nt+1)
 
-  let circleX2 = noiseLevel * noise(nt)
-  let circleY2 = noiseLevel * noise(nt+15000)
+  let circleX2 = noiseLevel * noise(nt+noise2*2)
+  let circleY2 = noiseLevel * noise(nt+2)
 
-  let circleX3 = noiseLevel * noise(nt)
-  let circleY3 = noiseLevel * noise(nt+25000)
+  let circleX3 = noiseLevel * noise(nt+noise2*3)
+  let circleY3 = noiseLevel * noise(nt+3)
 
-  let bezierX = noiseLevel * noise(nt)
-  let bezierY = noiseLevel * noise(nt+20000)
+  let bezierX = noiseLevel * noise(nt+noise2*4)
+  let bezierY = noiseLevel * noise(nt+4)
 
   let vocalRange = map(vocal, 40, 100, 0, 30)
   let vocalRange2 = map(vocal, 0, 100, 30,70)
+
+
+
+
 
   // Background stars
   function stars(scale2,speed,arrayX,arrayY){
@@ -185,16 +220,23 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
       vertex(arrayX[i]+50,arrayY[i])
       vertex(arrayX[i]+5,arrayY[i]-5)
       endShape(CLOSE)
-      if (arrayY[i] > 850/scale2){
-        arrayY[i] = -50/scale2
+      if (arrayY[i] < -50/scale2){
+        arrayY[i] = 850/scale2
       }
       pop()
     }
   }
-
-  stars(0.1,1,starsA,starsA2)
-  stars(0.3,2,starsB,starsB2)
-  stars(0.5,3,starsC,starsC2)
+  if (counter <speedUpStart || counter > speedUpEnd){
+    starSpeed = 0
+  }
+  if (counter >= speedUpStart && counter <= speedUpEnd){
+    if (starSpeed >= -5){
+      starSpeed = starSpeed - 0.5
+    }
+  }
+  stars(0.1,starSpeed-1,starsA,starsA2)
+  stars(0.3,starSpeed-2,starsB,starsB2)
+  stars(0.5,starSpeed-3,starsC,starsC2)
 
 
 
@@ -212,6 +254,8 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 
 
   // First Right Star
+  let bassSizeStar = map(bass,0,100,60,100)
+  ellipse(bezierX+500,bezierY+590,bassSizeStar)
   translate(bezierX+570,bezierY+100)
   rotate(-80)
   makeCurve(-100,300,0,75)
@@ -259,16 +303,49 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 
 
 
+  //First left star
+  noStroke()
+  if (vocal<50){
+      swordLength = map(vocal, 0, 50, 15, 30)
+  }
+  if (vocal>=50){
+    swordLength = map(vocal, 50, 100, 30, 70)
+  }
+  let swordStar = map(vocal, 0,100, 55, 100)
+  push()
+  ellipse(255+circleX2,590+circleY2,swordStar)
+  translate(205+circleX2,360+circleY2)
+  rotate(-12)
+  for (i = 0; i< 10; i++){
+    push()
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
+    translate(0,-195)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
+    translate(0,-195)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
+    translate(0,-195)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
+    pop()
+  }
+  pop()
+
   //Second Left Star
-  let emeraldSpeedVocal = map(vocal,0,100,10,25)
+  if (vocal <= 50){
+    emeraldSpeedVocal = map(vocal,0,50,10,15)
+  } else if (vocal >= 51){
+    emeraldSpeedVocal = map(vocal,50,100,15,40)}
   let emeraldStarVocal = map(vocal, 0, 100, 80,110)
 
   push()
   stroke(255)
   strokeWeight(5)
   fill(255)
-  translate(250,600)
-  rotate(-10)
+  translate(125+circleX3,650+circleY3)
+  rotate(-20)
 
   glow(color(255),30)
   ellipse(0,0,emeraldStarVocal)
@@ -286,7 +363,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   }
 
   if (firstRun3 == true){
-    for (let i = 0; i<40; i++){
+    for (let i = 0; i<30; i++){
       cShapeY.push(i*-30)
       cShapeX.push(random(-50,50))
       firstRun3 = false
@@ -305,7 +382,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     translate(0,-70)
     customShape(i,cShapeY[i])
     pop()
-    if (cShapeY[i] <= cShapeX.length*-29){
+    if (cShapeY[i] <= -900){
       cShapeY[i] = 0
       rotation[i] = random(-10,10)
     }
