@@ -28,6 +28,12 @@ let noiseLevel
 let noiseScale
 let noise2 = 5
 
+let bassSize
+let bassSize2
+
+let emeraldSpeedVocal
+let emeraldStarVocal
+
 
 class Particle {
   constructor(x, y, z) {
@@ -108,8 +114,14 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   function makeCurve(anchorX1, anchorX2, anchorY, width){
     push()
     bubbleDecay--
-    let bassSize = map(bass,0,100,anchorY,anchorY+300)
-    let bassSize2 = map(bass,0,100,anchorY,anchorY-300)
+
+    if (bass >= 40){
+      bassSize = map(bass,40,90,anchorY-200,anchorY+400)
+      bassSize2 = map(bass,40,90,anchorY+200,anchorY-400)
+    }else if (bass < 40){
+      bassSize = map(bass,0,40,anchorY-100,anchorY-200)
+      bassSize2 = map(bass,0,40,anchorY+100,anchorY+200)
+    }
     let x1 = anchorX2-150
     let y1 = bassSize-width
     let x2 = anchorX2-250
@@ -149,7 +161,9 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   //console.log(counter)
   console.log(counter)
   speedUpStart = 3200
-  speedUpEnd = 4300
+  speedUpEnd = 4500
+
+  // 3200 4300
 
   if (counter < speedUpStart){
     noiseLevel = 50
@@ -160,8 +174,8 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     if (noiseLevel <75){
       noiseLevel++
     }
-    if (noiseScale < 0.03){
-      noiseScale = noiseScale +0.01
+    if (noiseScale < 0.030){
+      noiseScale = noiseScale +0.00001
     }
   }
   if (counter >= speedUpEnd){
@@ -169,7 +183,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
       noiseLevel--
     }
     if (noiseScale > 0.02){
-    noiseScale = noiseScale -0.01
+    noiseScale = noiseScale -0.00001
     }
   }
 
@@ -284,7 +298,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     drumFire2 = map(drum, 60, 100, 11, 14)
   }
   let drumSize = map(drum, 0, 100, 0,60) // Star size
-  let drumSize2 = map(drum, 0, 100, 0,50) // Fire length
+  let drumSize2 = map(drum, 0, 100, 0,50) // Fire time on screen
   
   glow(color(255),30)
   push()
@@ -305,13 +319,13 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 
   //First left star
   noStroke()
-  if (vocal<50){
-      swordLength = map(vocal, 0, 50, 15, 30)
+  if (bass<50){
+      swordLength = map(bass, 0, 50, 15, 30)
   }
-  if (vocal>=50){
-    swordLength = map(vocal, 50, 100, 30, 70)
+  if (bass>=50){
+    swordLength = map(bass, 50, 90, 30, 70)
   }
-  let swordStar = map(vocal, 0,100, 55, 100)
+  let swordStar = map(bass, 0,90, 55, 100)
   push()
   ellipse(255+circleX2,590+circleY2,swordStar)
   translate(205+circleX2,360+circleY2)
@@ -334,11 +348,13 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   pop()
 
   //Second Left Star
+  
   if (vocal <= 50){
     emeraldSpeedVocal = map(vocal,0,50,10,15)
   } else if (vocal >= 51){
     emeraldSpeedVocal = map(vocal,50,100,15,40)}
   let emeraldStarVocal = map(vocal, 0, 100, 80,110)
+
 
   push()
   stroke(255)

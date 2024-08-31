@@ -3,51 +3,109 @@ let lastWords = "...";
 let wordBrightness = 255;
 let yOffset = 0;
 
-function draw_one_frame(words, vocal, drum, bass, other, counter) {
-background(0);
-rectMode(CENTER);
-textAlign(CENTER);
-textFont('Luminari '); // please use CSS safe fonts
-
-if (words == "") {
-  wordBrightness = int(wordBrightness * 0.95); //fade brightness 
-  words = lastWords; // safe the last known word so we can display 
-  if (yOffset < height / 4) {
-    yOffset = yOffset + 1;
+class Particle {
+  constructor(x, y, z) {
+    this.x = x;
+    this.y = y;
+    this.vx = random(-1, 1);
+    this.vy = random(-z/4, -z);
+    this.alpha = 255;
+    this.frameCount = 0
   }
-} else {
-  wordBrightness = 255; // set brightness to max
-  yOffset = 0; //don't offset down
-  lastWords = words; // keep track of what the most recent word is
+
+  update() {
+    this.frameCount++
+    if (this.frameCount % 5 == 0){
+         // Spawn a new fire every 5 frames
+         let newFire = new Particle(this.x, this.y); // Assuming 'z' is accessible here
+         // Add the new fire to your fires array or collection
+    }
+    this.x += this.vx;
+    this.y += this.vy;
+    this.alpha -= 6;
+  }
+
+  show(size) {
+    noStroke();
+    fill(255, 255, 255, this.alpha);
+    //triangle(this.x, this.y - size, this.x - size, this.y + size, this.x + size, this.y + size);
+    beginShape()
+    vertex(this.x,this.y-size)
+    vertex(this.x-size,this.y+size)
+    vertex(this.x-size,this.y+size+20)
+    vertex(this.x+size,this.y+size)
+    endShape(CLOSE)
+  }
+
+  // vertex(0+cShapeX[i],0+cShapeY[i])
+  // vertex(20+cShapeX[i],20+cShapeY[i])
+  // vertex(20+cShapeX[i],50+cShapeY[i])
+  // vertex(0+cShapeX[i],70+cShapeY[i])
+  // vertex(-20+cShapeX[i],50+cShapeY[i])
+  // vertex(-20+cShapeX[i],20+cShapeY[i])
+  // endShape(CLOSE)
+
+
+  isFinished() {
+    return this.alpha <= 0;
+  }
+}
+class Fire {
+  constructor() {
+    this.particles = [];
+  }
+
+  addParticle(x, y, z, x1, x2) {
+    this.particles.push(new Particle(x, y, z));
+    this.particles.push(new Particle(x-(random(x1,x2)), y, z));
+  }
+
+  update() {
+    for (let i = this.particles.length - 1; i >= 0; i--) {
+      this.particles[i].update();
+      if (this.particles[i].isFinished()) {
+        this.particles.splice(i, 1);
+      }
+    }
+    //console.log(this.particles.length)
+  }
+
+  show(size) {
+    for (let particle of this.particles) {
+      particle.show(size);
+    }
+  }
 }
 
-fill(wordBrightness);
-textSize(40);
-text(words, width / 2, height / 5 + yOffset); // display current lyric in middle of page, then fade down
+// Create an instance of the Fire class
 
-let volume_vocal = map(vocal, 0, 100, 0, 0.7 * height, true);
-let volume_drum  = map(drum, 0, 100, 0, 0.7 * height, true);
-let volume_bass  = map(bass, 0, 100, 0, 0.7 * height, true);
-let volume_other = map(other, 0, 100, 0, 0.7 * height, true);
+let fire = new Fire();
 
 
-rectMode(CENTER);
-let rectY = height/3 *2
-fill(200, 0, 0);
-rect(2*width/10, rectY, width/6, volume_vocal);
-fill(0, 200, 0);
-rect(4*width/10, rectY, width/6, volume_drum);
-fill(200, 200, 200);
-rect(6*width/10, rectY, width/6, volume_bass);
-fill(0, 0, 200);
-rect(8*width/10, rectY, width/6, volume_other);
-
-fill(200)
-textAlign(LEFT);
-// demonstrate use of non-documented "counter" variable
-let seconds = counter
-if(seconds > 0) {
-  textSize(60);
-  text(nf(seconds, 3, 2), 20, height-20);
+// Draw
+function draw_one_frame(words, vocal, drum, bass, other, counter) {
+background(0)
+translate(400,400)
+let drumFire  // Fire speed
+let drumFire2 // Fire Size
+if (drum <= 60){
+  drumFire = 10
+  drumFire2 = 10
+}else if (drum > 60){
+  drumFire = map(drum, 60, 100, 15, 28)
+  drumFire2 = map(drum, 60, 100, 11, 14)
 }
+let drumSize = map(drum, 0, 100, 0,60) // Star size
+let drumSize2 = map(drum, 0, 100, 0,50) // Fire time on screen
+
+
+fire.addParticle(random(0-drumSize2,0+drumSize2),0, drumFire);
+if (drum>60){
+  fire.addParticle(random(0-drumSize2,0+drumSize2),0, drumFire);
+  //fire.addParticle(random(0-drumSize2,0+drumSize2),0, drumFire);
+}
+fire.update();
+fire.show(drumFire2);
+ellipse(0,0,drumSize+30)
+pop()
 }
