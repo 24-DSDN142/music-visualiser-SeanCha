@@ -34,6 +34,8 @@ let bassSize2
 let emeraldSpeedVocal
 let emeraldStarVocal
 
+let starCounter = 0
+
 
 class Particle {
   constructor(x, y, z) {
@@ -170,7 +172,6 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     noiseScale = 0.02
   }
   if (counter >speedUpStart && counter < speedUpEnd){
-    rect(500,700,20,20)
     if (noiseLevel <75){
       noiseLevel++
     }
@@ -187,6 +188,47 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     }
   }
 
+  if (counter >=3200 && counter <3500){
+    starCounter++
+    push()
+    translate(400,400)
+    scale(starCounter*3)
+    rotate(starCounter)
+    star(0, 0, 10);
+    star(0, 0, 5);
+    pop()
+}
+
+if (counter >= 3550 && counter <= 3600){
+  starCounter = 0
+}
+
+if (counter >=3800 && counter<=4100){
+  starCounter++
+  push()
+  translate(400,400)
+  scale(starCounter*3)
+  rotate(starCounter)
+  star(0, 0, 10);
+  star(0, 0, 5);
+  pop()
+}
+
+
+if (counter >= 4150 && counter <= 4200){
+  starCounter = 0
+}
+
+if (counter >=4400){
+  starCounter++
+  push()
+  translate(400,400)
+  scale(starCounter*3)
+  rotate(starCounter)
+  star(0, 0, 10);
+  star(0, 0, 5);
+  pop()
+}
 
   
 
@@ -379,8 +421,8 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   }
 
   if (firstRun3 == true){
-    for (let i = 0; i<30; i++){
-      cShapeY.push(i*-30)
+    for (let i = 0; i<27; i++){
+      cShapeY.push(i*-35)
       cShapeX.push(random(-50,50))
       firstRun3 = false
     }
@@ -410,4 +452,25 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 function glow(glowColor, blurriness) {
   drawingContext.shadowColor = glowColor;
   drawingContext.shadowBlur = blurriness;
+}
+function star(x, y, s) {
+  s /= 2;
+  var offset = 1 / 5 * TAU;
+  push();
+  stroke(255)
+  strokeWeight(0.05)
+  noFill()
+  beginShape();
+  for (var i = 0; i < 5; i++) {
+      var a1 = i * offset - 1 / 20 * TAU;
+      var a2 = i * offset + offset / 2.0 - 1 / 20 * TAU;
+      var v1 = p5.Vector.fromAngle(a1).mult(s);
+        var v2 = p5.Vector.fromAngle(a2).mult(s * 0.5);
+      v1.add(x, y);
+      v2.add(x, y);
+      vertex(v1.x, v1.y);
+      vertex(v2.x, v2.y);
+  }
+  endShape(CLOSE);
+  pop();
 }
