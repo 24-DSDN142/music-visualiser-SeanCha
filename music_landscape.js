@@ -1,59 +1,71 @@
-let last_words = "";
-let last_words_opacity = 0;
-
+width = 800
+height = 800
+let starCounter = 0
 function draw_one_frame(words, vocal, drum, bass, other,counter) {
-  background(255,236,180); // cream
-  fill(244,161,39); // orange
-
-  let stripeWidth = map(other, 40, 100, 40, 80, true);
-
-  let numStripes = height / stripeWidth;
-  for(let i=0; i<numStripes; i=i+2) {
-    let cury = map(i, 0, numStripes-1, 0, height);
-    rect(0, cury, width, stripeWidth);
-  }
-
-  let triangleHeight = map(bass, 40, 100, 200, 550, true);
-  fill(117,200,174); // teal
-  for(let i=0; i<3; i++) {
-    let cur_x = map(i, 0, 4, 0, width);
-    let next_x = map(i+1, 0, 3, 0, width);
-    let mid_x = (cur_x + next_x) / 2.0;
-    //let cur_y = 4 * height / 5;
-    let cur_y = height 
-    triangle(cur_x, cur_y, mid_x, cur_y - triangleHeight, next_x, cur_y);
-  }
-
-
-  let drumSize = map(drum, 30, 100, 30, 300, true);
-  fill(90,61,43); // brown
-  rect(0, 0, drumSize, drumSize);
-  rect(width, 0, -drumSize, drumSize);
-  rect(0, height, drumSize, -drumSize);
-  rect(width, height, -drumSize, -drumSize);
-
-  let ovalPlace = map(vocal, 20, 100, height-50, 50, true);
-  let ovalSize = map(vocal, 20, 100, 60, 150, true);
-  fill(229,119,30); // darker orange
-  ellipse(width/2, ovalPlace, ovalSize);
-
-  if(words == "") {
-    last_words_opacity = last_words_opacity * 0.95;
-    words = last_words;
-  }
-  else {
-    last_words_opacity = (1 + last_words_opacity) * 1.1;
-    if(last_words_opacity > 255) {
-      last_words_opacity = 255;
+    console.log(counter)
+    background(102)
+    // noStroke()
+    // if (vocal<50){
+    //     swordLength = map(vocal, 0, 50, 15, 30)
+    // }
+    // if (vocal>=50){
+    // swordLength = map(vocal, 50, 100, 30, 70)
+    // }
+    // translate(400,300)
+    // for (i = 0; i< 10; i++){
+    // push()
+    // translate(0,0)
+    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
+    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
+    // pop()
+    // push()
+    // translate(0,195)
+    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
+    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
+    // pop()
+    // push()
+    // translate(0,-195)
+    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
+    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
+    // pop()
+    // }
+    // translate(400,200)
+    // stroke(255)
+    // noFill()
+    // beginShape()
+    // vertex(0,0)
+    // vertex(50,100)
+    // vertex(150,100)
+    // endShape(CLOSE)
+    if (counter >=50){
+        starCounter++
+        push()
+        translate(400,400)
+        scale(starCounter*2)
+        rotate(starCounter)
+        star(0, 0, 10);
+        pop()
     }
-  }
-  last_words = words;
-
-  textFont('Georgia');
-  textAlign(CENTER);
-  textStyle(BOLD);
-  textSize(80);
-  noStroke();
-  fill(0, 0, 0, int(last_words_opacity));
-  text(words, width/2, height/2);
 }
+
+function star(x, y, s) {
+    s /= 2;
+    var offset = 1 / 5 * TAU;
+    push();
+    stroke(255)
+    strokeWeight(0.1)
+    noFill()
+    beginShape();
+    for (var i = 0; i < 5; i++) {
+        var a1 = i * offset - 1 / 20 * TAU;
+        var a2 = i * offset + offset / 2.0 - 1 / 20 * TAU;
+        var v1 = p5.Vector.fromAngle(a1).mult(s);
+          var v2 = p5.Vector.fromAngle(a2).mult(s * 0.5);
+        v1.add(x, y);
+        v2.add(x, y);
+        vertex(v1.x, v1.y);
+        vertex(v2.x, v2.y);
+    }
+    endShape(CLOSE);
+    pop();
+  }

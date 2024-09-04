@@ -1,82 +1,62 @@
-let words_history = [];
-let vocal_history = [];
-let drum_history = [];
-let bass_history = [];
-let other_history = [];
-
-function draw_history_line(history) {
-  beginShape(LINES);
-  for(let i=0; i<history.length; i++) {
-    let x = i*4;
-    let y = map(history[i], 0, 100, height, height/8, true);
-    vertex(x, y);
-  }
-  endShape();
-}
-
-function draw_history_words(history) {
-  let last_words = history[0];
-  let text_y = height/8;
-  for(let i=0; i<history.length; i++) {
-    let x = i*4;
-    let cur_words = history[i];
-    if(cur_words != last_words) {
-      push();
-      translate(x, text_y);
-      rotate(-30);
-      text(cur_words, 0, 0);
-      pop();
-      last_words = cur_words;
-    }
-  }
-}
-
-function add_to_history(history, d) {
-  history.push(d);
-  if(history.length >= (width-1)/4) {
-    history.shift();
-  }
-}
+let yPos = 0
+//let cShapeX = [0,10,20,-10,-20,0,10,20,-10,-20]
+//let cShapeY = [0,-100,-200,-300,-400,-500,-600,-700,-800,-900]
+let speed
+let rotation = []
+let firstRun3 = true
+let firstRun2 = true
+let cShapeX = []
+let cShapeY = []
 
 function draw_one_frame(words, vocal, drum, bass, other,counter) {
-  background(20);
+  background(0)
 
-  add_to_history(words_history, words);
-  add_to_history(vocal_history, vocal);
-  add_to_history(drum_history, drum);
-  add_to_history(bass_history, bass);
-  add_to_history(other_history, other);
+  let emeraldSpeedVocal = map(vocal,0,100,10,25)
+  let emeraldStarVocal = map(vocal, 0, 100, 80,110)
 
-  strokeWeight(10);  
+  push()
+  stroke(255)
+  strokeWeight(2)
+  fill(255)
+  translate(0,0)
+  ellipse(0,0,emeraldStarVocal)
+  noFill()
+  function customShape(i){
+    beginShape()
+    vertex(0+cShapeX[i],0+cShapeY[i])
+    vertex(20+cShapeX[i],20+cShapeY[i])
+    vertex(20+cShapeX[i],50+cShapeY[i])
+    vertex(0+cShapeX[i],70+cShapeY[i])
+    vertex(-20+cShapeX[i],50+cShapeY[i])
+    vertex(-20+cShapeX[i],20+cShapeY[i])
+    endShape(CLOSE)
+  }
 
-  // vocal bar is red
-  stroke(200, 0, 0);
-  draw_history_line(vocal_history);
+  if (firstRun3 == true){
+    for (let i = 0; i<40; i++){
+      cShapeY.push(i*-30)
+      cShapeX.push(random(-50,50))
+      firstRun3 = false
+    }
+  }
 
-  // drum bar is green
-  stroke(0, 200, 0);
-  draw_history_line(drum_history);
+  for (let i = 0; i < cShapeX.length; i++){
+    if (firstRun2 == true){
+      rotation[i] = random(-10,10)
+      firstRun2 = false
+    }
+    push()
+    scale(0.8)
+    rotate(rotation[i])
+    cShapeY[i] = cShapeY[i] -emeraldSpeedVocal
+    translate(0,-70)
+    customShape(i,cShapeY[i])
+    pop()
+    if (cShapeY[i] <= cShapeX.length*-29){
+      cShapeY[i] = 0
+      rotation[i] = random(-10,10)
+    }
 
-  // bass bar is blue
-  stroke(0, 0, 200);
-  draw_history_line(bass_history);
-
-  // other bar is white
-  stroke(200, 200, 200);
-  draw_history_line(other_history);
-
-  textAlign(CENTER);
-  textSize(25);
-
-  // big yellow words on top
-  noStroke();
-  fill(255, 255, 0);
-  draw_history_words(words_history);    
-}
-
-function reset_music() {
-  vocal_history = [];
-  drum_history = [];
-  bass_history = [];
-  other_history = [];
+  }
+  pop()
 }
