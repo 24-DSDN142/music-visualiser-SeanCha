@@ -37,15 +37,38 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     // vertex(50,100)
     // vertex(150,100)
     // endShape(CLOSE)
-    if (counter >=50){
-        starCounter++
-        push()
-        translate(400,400)
-        scale(starCounter*2)
-        rotate(starCounter)
-        star(0, 0, 10);
-        pop()
-    }
+    // if (counter >=50){
+    //     starCounter++
+    //     push()
+    //     translate(400,400)
+    //     scale(starCounter*2)
+    //     rotate(starCounter)
+    //     star(0, 0, 10);
+    //     pop()
+    // }
+    push()
+    strokeWeight(1)
+    stroke(255)
+    translate(400,400)
+    scale(1)
+    beginShape()
+    vertex(0,0)
+    vertex(200,0)
+    vertex(200,150)
+    vertex(160,225)
+    vertex(40,225)
+    vertex(0,150)
+    endShape(CLOSE)
+
+    ellipse(25,0,50)
+    ellipse(75,0,50)
+    ellipse(125,0,50)
+    ellipse(175,0,50)
+    pop()
+    // beginShape()
+    // vertex(100,100)
+    // vertex(200,200)
+    // endShape(CLOSE)
 }
 
 function star(x, y, s) {

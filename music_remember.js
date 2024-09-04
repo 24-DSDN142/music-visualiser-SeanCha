@@ -165,7 +165,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   speedUpStart = 3200
   speedUpEnd = 4500
 
-  // 3200 4300
+  // 3200 4500
 
   if (counter < speedUpStart){
     noiseLevel = 50
@@ -300,11 +300,11 @@ if (counter >=4400){
 
 
 
-  // Middle Star
-  for (let i = 0; i < 20; i++){
-    glow(color(255), vocalRange2)
-    rect(circleX+375,circleY-i*55+525,30+i*3+vocalRange,50)
-  }
+ // Middle Star
+  // for (let i = 0; i < 20; i++){
+  //   glow(color(255), vocalRange2)
+  //   rect(circleX+375,circleY-i*55+525,30+i*3+vocalRange,50)
+  // }
   ellipse(circleX+375,circleY+550,45+vocalRange)
 
 
@@ -447,7 +447,29 @@ if (counter >=4400){
 
   }
   pop()
+  iminus = 40
+  xminus = 8
   
+  strokeWeight(1)
+  stroke(255)
+  for (let i = 0; i<10; i++){
+  push()
+  rectMode(CENTER)
+  translate(360+circleX,500-i*65+circleY)
+  scale(0.35+i/85)
+  beginShape()
+  vertex(-10,10)
+  vertex(110,10)
+  vertex(100,100)
+  vertex(75,150)
+  vertex(50,160)
+  vertex(25,150)
+  vertex(0,100)
+  endShape(CLOSE)
+  pop()
+  }
+
+
 }
 function glow(glowColor, blurriness) {
   drawingContext.shadowColor = glowColor;
