@@ -3,40 +3,52 @@ height = 800
 let starCounter = 0
 function draw_one_frame(words, vocal, drum, bass, other,counter) {
     console.log(counter)
-    background(102)
-    // noStroke()
-    // if (vocal<50){
-    //     swordLength = map(vocal, 0, 50, 15, 30)
-    // }
-    // if (vocal>=50){
-    // swordLength = map(vocal, 50, 100, 30, 70)
-    // }
-    // translate(400,300)
-    // for (i = 0; i< 10; i++){
-    // push()
-    // translate(0,0)
-    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
-    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
-    // pop()
-    // push()
-    // translate(0,195)
-    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
-    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
-    // pop()
-    // push()
-    // translate(0,-195)
-    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
-    // triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
-    // pop()
-    // }
-    // translate(400,200)
-    // stroke(255)
-    // noFill()
-    // beginShape()
-    // vertex(0,0)
-    // vertex(50,100)
-    // vertex(150,100)
-    // endShape(CLOSE)
+    background(0)
+    starCounter++
+    stroke(255)
+    //rotate(10)
+    //star(0,0,100)
+    push()
+    noStroke()
+    if (vocal<50){
+        swordLength = map(vocal, 0, 50, 15, 30)
+    }
+    if (vocal>=50){
+    swordLength = map(vocal, 50, 100, 30, 70)
+    }
+    translate(400,300)
+    for (i = 0; i< 10; i++){
+    push()
+    translate(0,0)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
+    pop()
+    push()
+    translate(0,195)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
+    pop()
+    push()
+    translate(0,-195)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
+    triangle(0,i*20+swordLength,0,i*20+10+swordLength,-swordLength,5+swordLength)
+    pop()
+    }
+    pop()
+    push()
+    noStroke()
+    translate(0,400)
+    triangle(100,100,150,100,125,300)
+    triangle(100,-100,150,-100,125,100)
+    triangle(100,-300,150,-300,125,-100)
+    pop()
+    beginShape()
+    vertex(0,0)
+    vertex(50,100)
+    vertex(150,100)
+    endShape(CLOSE)
+    translate(100,0)
+    triangle(500,100,600,100,550,700)
     // if (counter >=50){
     //     starCounter++
     //     push()
@@ -46,37 +58,39 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     //     star(0, 0, 10);
     //     pop()
     // }
-    push()
-    strokeWeight(1)
-    stroke(255)
-    translate(400,400)
-    scale(1)
-    beginShape()
-    vertex(0,0)
-    vertex(200,0)
-    vertex(200,150)
-    vertex(160,225)
-    vertex(40,225)
-    vertex(0,150)
-    endShape(CLOSE)
+    // push()
+    // strokeWeight(1)
+    // stroke(255)
+    // translate(400,400)
+    // scale(1)
+    // beginShape()
+    // vertex(0,0)
+    // vertex(200,0)
+    // vertex(200,150)
+    // vertex(160,225)
+    // vertex(40,225)
+    // vertex(0,150)
+    // endShape(CLOSE)
 
-    ellipse(25,0,50)
-    ellipse(75,0,50)
-    ellipse(125,0,50)
-    ellipse(175,0,50)
-    pop()
+    // ellipse(25,0,50)
+    // ellipse(75,0,50)
+    // ellipse(125,0,50)
+    // ellipse(175,0,50)
+    // pop()
     // beginShape()
     // vertex(100,100)
     // vertex(200,200)
     // endShape(CLOSE)
+
 }
 
 function star(x, y, s) {
     s /= 2;
     var offset = 1 / 5 * TAU;
     push();
+    //translate(400,400)
     stroke(255)
-    strokeWeight(0.1)
+    strokeWeight(1)
     noFill()
     beginShape();
     for (var i = 0; i < 5; i++) {

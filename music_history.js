@@ -18,7 +18,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   stroke(255)
   strokeWeight(2)
   fill(255)
-  translate(0,0)
+  translate(400,400)
   ellipse(0,0,emeraldStarVocal)
   noFill()
   function customShape(i){
@@ -59,4 +59,14 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 
   }
   pop()
+  translate(200,100)
+  beginShape()
+  vertex(0,0)
+  vertex(20,20)
+  vertex(20,50)
+  vertex(0,70)
+  vertex(-20,50)
+  vertex(-20,20)
+  endShape(CLOSE)
 }
+

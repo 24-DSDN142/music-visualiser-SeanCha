@@ -108,29 +108,33 @@ function draw_one_frame(words, vocal, drum, bass, other, counter) {
   makeCurve(500,600,300)
   pop() 
   
-  for (var i = 0; i <= lines; i++) {
-    const s = (i * lineWidth) + lineWidth;
-    const chordLength = (Math.sqrt((2 * s * r) - (s*s)) * 2 +bassSize2);
-    rect(i * lineWidth, r - (chordLength / 2), lineWidth-1, chordLength);
-    // rect(x, y, width, height)
-  }
-  triangle(0,0,)
-  triangle()
+  // for (var i = 0; i <= lines; i++) {
+  //   const s = (i * lineWidth) + lineWidth;
+  //   const chordLength = (Math.sqrt((2 * s * r) - (s*s)) * 2 +bassSize2);
+  //   rect(i * lineWidth, r - (chordLength / 2), lineWidth-1, chordLength);
+  //   // rect(x, y, width, height)
+  // }
+  // triangle(0,0,)
+  // triangle()
 
+
+  push()
+  translate(0,200)
   let yPos1 = 600
   let yPos2 = 750
-  // beginShape()
-  // vertex(-1,bassSize3+yPos1)
-  // vertex(75,bassSize2+yPos2)
-  // vertex(150,bassSize3+yPos1)
-  // vertex(225,bassSize2+yPos2)
-  // vertex(300,bassSize3+yPos1)
-  // vertex(375,bassSize2+yPos2)
-  // vertex(450,bassSize3+yPos1)
-  // vertex(525,bassSize2+yPos2)
-  // vertex(601,bassSize3+yPos1)
-  // vertex(601,1000)
-  // vertex(-1,1000)
+  beginShape()
+  vertex(-1,bassSize3+yPos1)
+  vertex(75,bassSize2+yPos2)
+  vertex(150,bassSize3+yPos1)
+  vertex(225,bassSize2+yPos2)
+  vertex(300,bassSize3+yPos1)
+  vertex(375,bassSize2+yPos2)
+  vertex(450,bassSize3+yPos1)
+  vertex(525,bassSize2+yPos2)
+  vertex(601,bassSize3+yPos1)
+  vertex(601,1000)
+  vertex(-1,1000)
+  pop()
   
   
 

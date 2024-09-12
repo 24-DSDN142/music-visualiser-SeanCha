@@ -25,6 +25,7 @@ let starsC = [700,900,650,550,1000,600]
 let starsC2 = [500,400,200,1000,1200,1500]
 let firstRun = 0
 
+
 let noiseLevel
 let noiseScale
 let noise2 = 5
@@ -32,9 +33,11 @@ let noise2 = 5
 let bassSize
 let bassSize2
 
+
+
 let starCounter = 0
 
-// Fire particle generator (made by codiumate)
+
 class Particle {
   constructor(x, y, z) {
     this.x = x;
@@ -80,6 +83,7 @@ class Fire {
         this.particles.splice(i, 1);
       }
     }
+    //console.log(this.particles.length)
   }
 
   show(size) {
@@ -98,20 +102,22 @@ for (let x = 0; x < width; x += 20) {
     line(x,y,10)
   }
 }
-
-
 // vocal, drum, bass, and other are volumes ranging from 0 to 100
 function draw_one_frame(words, vocal, drum, bass, other,counter) {
-  //Slightly gray
   background(20);
   rectMode(CENTER)
+  fill(255)
   firstRun++
+  if (firstRun <= 75){
+    console.log(starsB)
+    console.log(starsB2)
+  }else{}
 
 
-
-  // Function to make bezier curves on first right star
   function makeCurve(anchorX1, anchorX2, anchorY, width){
     push()
+    bubbleDecay--
+
     if (bass >= 40){
       bassSize = map(bass,40,90,anchorY-200,anchorY+400)
       bassSize2 = map(bass,40,90,anchorY+200,anchorY-400)
@@ -123,18 +129,45 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     let y1 = bassSize-width
     let x2 = anchorX2-250
     let y2 = bassSize2+width
-    noFill()
-    stroke(255)
-    strokeWeight(7)
+    noFill();
+    stroke(255); //130, 91, 179
+    strokeWeight(7);
     bezier(anchorX1,anchorY,x1,y1,x2,y2,anchorX2,anchorY)
+    strokeWeight(1)
+    fill(130,91,179)
+  
+    strokeWeight(3)
+    function bubbleMovement(){
+      if (bubbleMove2.length <= 30){
+      for (let i=0;i<30;i++)
+        bubbleMove2.push(i/30)}
+    }
+    bubbleMovement()
+    for (let i=0;i<30;i++){  
+      strokeWeight(4)                        //bubbles
+      bubbleMove2[i] = bubbleMove2[i]+0.001
+      if (bubbleMove2[i]>=1){
+        bubbleMove2[i]=0
+      }
+      let xGlow = bezierPoint(anchorX1,x1,x2,anchorX2,1-bubbleMove2[i])
+      let xGlow1 = bezierPoint(anchorX1-bubbleDist,x1,x2,anchorX2-bubbleDist,1-bubbleMove2[i])
+      let xGlow2 = bezierPoint(anchorX1+bubbleDist,x1,x2,anchorX2+bubbleDist,1-bubbleMove2[i])
+      let yGlow = bezierPoint(anchorY,y1,y2,anchorY,1-bubbleMove2[i])
+      stroke(237, 107, 239)
+      //point(xGlow,yGlow)
+      //point(xGlow1,yGlow)
+      //point(xGlow2,yGlow)
+    }
     pop()
   }
-
-
-
-  // Increase noise level and scale when counter gets to 3200 and decrease when at 4500
+  push()
+  //console.log(counter)
+  console.log(counter)
   speedUpStart = 3200
   speedUpEnd = 4500
+
+  // 3200 4500
+
   if (counter < speedUpStart){
     noiseLevel = 50
     noiseScale = 0.02
@@ -156,9 +189,6 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     }
   }
 
-
-
-  // Create a big star that increases in size at certain counter values
   if (counter >=3200 && counter <3500){
     starCounter++
     push()
@@ -168,42 +198,43 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     star(0, 0, 10);
     star(0, 0, 5);
     pop()
-  }
+}
 
-  if (counter >= 3550 && counter <= 3600){
-    starCounter = 0
-  }
+if (counter >= 3550 && counter <= 3600){
+  starCounter = 0
+}
 
-  if (counter >=3800 && counter<=4100){
-    starCounter++
-    push()
-    translate(400,400)
-    scale(starCounter*3)
-    rotate(starCounter)
-    star(0, 0, 10);
-    star(0, 0, 5);
-    pop()
-  }
-
-  if (counter >= 4150 && counter <= 4200){
-    starCounter = 0
-  }
-
-  if (counter >=4400){
-    starCounter++
-    push()
-    translate(400,400)
-    scale(starCounter*3)
-    rotate(starCounter)
-    star(0, 0, 10);
-    star(0, 0, 5);
-    pop()
-  }
+if (counter >=3800 && counter<=4100){
+  starCounter++
+  push()
+  translate(400,400)
+  scale(starCounter*3)
+  rotate(starCounter)
+  star(0, 0, 10);
+  star(0, 0, 5);
+  pop()
+}
 
 
+if (counter >= 4150 && counter <= 4200){
+  starCounter = 0
+}
 
-  // Noise seeds
-  // Each noise value is slightly diffrent so each of the stars and trails move a bit differently from eachother to give more of a sense of movement
+if (counter >=4400){
+  starCounter++
+  push()
+  translate(400,400)
+  scale(starCounter*3)
+  rotate(starCounter)
+  star(0, 0, 10);
+  star(0, 0, 5);
+  pop()
+}
+
+  
+
+  noStroke()
+
   let nt = noiseScale * frameCount
   let circleX = noiseLevel * noise(nt+noise2*1)
   let circleY = noiseLevel * noise(nt+1)
@@ -216,6 +247,10 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 
   let bezierX = noiseLevel * noise(nt+noise2*4)
   let bezierY = noiseLevel * noise(nt+4)
+
+
+
+
 
 
 
@@ -249,7 +284,6 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
       pop()
     }
   }
-  // Speed up stars when counter is above a certain value and slow back down at a certain value
   if (counter <speedUpStart || counter > speedUpEnd){
     starSpeed = 0
   }
@@ -258,27 +292,69 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
       starSpeed = starSpeed - 0.5
     }
   }
-  // 3 Layers of stars moving at different speeds
   stars(0.1,starSpeed-1,starsA,starsA2)
   stars(0.3,starSpeed-2,starsB,starsB2)
   stars(0.5,starSpeed-3,starsC,starsC2)
 
 
 
+
+
+
+
   // Middle Star
-  let vocalRange = map(vocal, 40, 100, 0, 25)
+  let vocalRange = map(vocal, 40, 100, 0, 30)
   let vocalRange2 = map(vocal, 0, 100, 30,100)
-  // Rectangles increasing in size, width affected by vocalRange
+  let handGold = map(vocal, 0, 100, 0, 12)
+  let handGold2 = map(vocal, 0, 100, 0, 17.5)
   for (let i = 0; i < 20; i++){
     fill(255)
     glow(color(255), vocalRange2)
-    rect(circleX+375,circleY-i*55+525,50+i*3+vocalRange,50)
+    rect(circleX+375,circleY-i*55+525,30+i*3+vocalRange,50)
   }
-
+  // for (let i = 0; i <20; i++){
+  //   for (let g = 0; g <4; g++){
+  //     push()
+  //     glow(color(229,184,11), 0)
+  //     fill(0)
+  //     ellipse(375+(g*handGold*(i+6)/10)+circleX-handGold2*(i+6)/10,515+circleY-i*55,11)
+  //     pop()
+  //   }
+  // }
   fill(255)
-  ellipse(circleX+375,circleY+550,55+vocalRange)
+  ellipse(circleX+375,circleY+550,45+vocalRange)
   push()
-
+  // translate(250,0)
+  // rotate(10)
+  // // for (let i = 0; i < 20; i++){
+  // //   fill(255)
+  // //   glow(color(255), vocalRange2)
+  // //   rect(circleX+375,circleY-i*55+525,30+i*3+vocalRange,50)
+  // // }
+  // translate(220,0)
+  // rotate(10)
+  // // for (let i = 0; i < 20; i++){
+  // //   fill(255)
+  // //   glow(color(255), vocalRange2)
+  // //   rect(circleX+375,circleY-i*55+525,30+i*3+vocalRange,50)
+  // // }
+  // pop()
+  // push()
+  // translate(-250,130)
+  // rotate(-10)
+  // // for (let i = 0; i < 20; i++){
+  // //   fill(255)
+  // //   glow(color(255), vocalRange2)
+  // //   rect(circleX+375,circleY-i*55+525,30+i*3+vocalRange,50)
+  // // }
+  // translate(-220,130)
+  // rotate(-10)
+  // for (let i = 0; i < 20; i++){
+  //   fill(255)
+  //   glow(color(255), vocalRange2)
+  //   rect(circleX+375,circleY-i*55+525,30+i*3+vocalRange,50)
+  // }
+  pop()
 
   // First Right Star
   let bassSizeStar = map(bass,0,100,60,100)
@@ -292,10 +368,11 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   makeCurve(-500,-100,20,75)
   makeCurve(-500,-100,40,75)
   pop()
-  // let fps = frameRate();
-  // fill(255);
-  // stroke(0);
-  // text("FPS: " + fps.toFixed(2), 10, height - 10);
+  let fps = frameRate();
+  fill(255);
+  stroke(0);
+  text("FPS: " + fps.toFixed(2), 10, height - 10);
+
 
 
 
@@ -310,7 +387,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     drumFire2 = map(drum, 60, 100, 11, 14)
   }
   let drumSize = map(drum, 0, 100, 0,60) // Star size
-  let drumSize2 = map(drum, 0, 100, 0,50) // Fire time on screen before fading out
+  let drumSize2 = map(drum, 0, 100, 0,50) // Fire time on screen
   
   glow(color(255),30)
   push()
@@ -331,7 +408,6 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 
   //First left star
   noStroke()
-  //Adjust maps based on how high the value is
   if (bass<50){
       swordLength = map(bass, 0, 50, 15, 30)
   }
@@ -343,7 +419,6 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   ellipse(255+circleX2,590+circleY2,swordStar)
   translate(205+circleX2,360+circleY2)
   rotate(-12)
-  // Create triangles
   for (i = 0; i< 10; i++){
     push()
     triangle(0,i*20+swordLength,0,i*20+10+swordLength,swordLength,5+swordLength)
@@ -364,12 +439,13 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 
 
   //Second Left Star
-  //Adjust emeralSpeedVocal based on how high the value is
+  
   if (vocal <= 50){
     emeraldSpeedVocal = map(vocal,0,50,10,15)
   } else if (vocal >= 51){
     emeraldSpeedVocal = map(vocal,50,100,15,40)}
   let emeraldStarVocal = map(vocal, 0, 100, 80,110)
+
 
   push()
   stroke(255)
@@ -377,10 +453,10 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
   fill(255)
   translate(125+circleX3,650+circleY3)
   rotate(-20)
+
   glow(color(255),30)
   ellipse(0,0,emeraldStarVocal)
   noFill()
-  // Create emerald shapes
   function customShape(i){
     glow(color(255),30)
     beginShape()
@@ -392,7 +468,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
     vertex(-20+cShapeX[i],20+cShapeY[i])
     endShape(CLOSE)
   }
-  // When program starts, fill cShape arrays with emerald positions
+
   if (firstRun3 == true){
     for (let i = 0; i<27; i++){
       cShapeY.push(i*-35)
@@ -400,7 +476,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
       firstRun3 = false
     }
   }
-  // Move emeralds based on emeraldSpeedVocal, then reset their position when the emeralds are out of frame with random offset and angle
+
   for (let i = 0; i < cShapeX.length; i++){
     if (firstRun2 == true){
       rotation[i] = random(-10,10)
@@ -420,15 +496,36 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 
   }
   pop()
+
+
+  // // Test Head
+  // let headLength = map(vocal, 0, 100, 0, 30)
+  // strokeWeight(1)
+  // stroke(255)
+  // for (let i = 0; i<12; i++){
+  // push()
+  // rectMode(CENTER)
+  // translate(357+circleX,500-i*55+circleY)
+  // scale(0.35+i/85)
+  // beginShape()
+  // vertex(-10-headLength,10)
+  // vertex(110+headLength,10)
+  // vertex(100,100)
+  // vertex(75,150)
+  // vertex(50,160)
+  // vertex(25,150)
+  // vertex(0,100)
+  // endShape(CLOSE)
+  // pop()
+  // }
 }
 
-// Function to make things glow
+
 function glow(glowColor, blurriness) {
   drawingContext.shadowColor = glowColor;
   drawingContext.shadowBlur = blurriness;
 }
 
-// Create star shape function
 function star(x, y, s) {
   s /= 2;
   var offset = 1 / 5 * TAU;

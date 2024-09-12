@@ -28,13 +28,7 @@ class Particle {
   show(size) {
     noStroke();
     fill(255, 255, 255, this.alpha);
-    //triangle(this.x, this.y - size, this.x - size, this.y + size, this.x + size, this.y + size);
-    beginShape()
-    vertex(this.x,this.y-size)
-    vertex(this.x-size,this.y+size)
-    vertex(this.x-size,this.y+size+20)
-    vertex(this.x+size,this.y+size)
-    endShape(CLOSE)
+    ellipse(this.x, this.y, size);
   }
 
   // vertex(0+cShapeX[i],0+cShapeY[i])
@@ -85,7 +79,7 @@ let fire = new Fire();
 // Draw
 function draw_one_frame(words, vocal, drum, bass, other, counter) {
 background(0)
-translate(400,400)
+translate(400,300)
 let drumFire  // Fire speed
 let drumFire2 // Fire Size
 if (drum <= 60){
@@ -104,6 +98,8 @@ if (drum>60){
   fire.addParticle(random(0-drumSize2,0+drumSize2),0, drumFire);
   //fire.addParticle(random(0-drumSize2,0+drumSize2),0, drumFire);
 }
+translate(0,100)
+//fire.addParticle(random(-400,500),400,10)
 fire.update();
 fire.show(drumFire2);
 ellipse(0,0,drumSize+30)
