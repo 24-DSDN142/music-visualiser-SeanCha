@@ -144,7 +144,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
       noiseLevel++
     }
     if (noiseScale < 0.030){
-      noiseScale = noiseScale +0.00001
+      noiseScale = noiseScale +0.000001
     }
   }
   if (counter >= speedUpEnd){
@@ -267,7 +267,7 @@ function draw_one_frame(words, vocal, drum, bass, other,counter) {
 
   // Middle Star
   let vocalRange = map(vocal, 40, 100, 0, 25)
-  let vocalRange2 = map(vocal, 0, 100, 30,100)
+  let vocalRange2 = map(vocal, 0, 100, 50,100)
   // Rectangles increasing in size, width affected by vocalRange
   for (let i = 0; i < 20; i++){
     fill(255)
